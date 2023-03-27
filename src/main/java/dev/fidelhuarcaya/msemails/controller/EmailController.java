@@ -19,8 +19,8 @@ public class EmailController {
     @PostMapping("/send")
     public ResponseEntity<?> sendEmail(@RequestBody EmailRequest request) {
 
-        System.out.println(request);
-        boolean result = this.emailService.sendEmail(request.getTema(), request.getMensaje(), request.getEmail());
+
+        boolean result = this.emailService.sendEmail(request.getTema()+"-"+request.getEmail(), request.getMensaje(), request.getEmail());
         if (result) {
 
             return ResponseEntity.ok("Email Properly Sent Successfully... ");

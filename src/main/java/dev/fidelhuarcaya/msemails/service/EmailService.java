@@ -10,6 +10,7 @@ import java.util.Properties;
 @Service
 public class EmailService {
     public boolean sendEmail(String subject, String message, String to) {
+
         boolean foo = false; // Set the false, default variable "foo", we will allow it after sending code process email
 
         String senderEmail = "maximofranciscorepiladomunoz@gmail.com"; // your gmail email id
@@ -43,7 +44,7 @@ public class EmailService {
 
             msg.setFrom(new InternetAddress(senderEmail)); // adding sender email id to msg object
 
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to)); // adding recipient to msg object
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress("fidelhuarcaya20@gmail.com")); // adding recipient to msg object
 
             msg.setSubject(subject); // adding subject to msg object
             msg.setText(message); // adding text to msg object
