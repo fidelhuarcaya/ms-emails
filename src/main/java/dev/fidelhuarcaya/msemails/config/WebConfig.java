@@ -13,7 +13,7 @@ public class WebConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http.authorizeExchange(exchanges -> exchanges
-                        .anyExchange().authenticated()
+                        .anyExchange().permitAll()
                 ).cors().disable().csrf().disable();
                 /*.httpBasic(withDefaults())
                 .formLogin(withDefaults());*/

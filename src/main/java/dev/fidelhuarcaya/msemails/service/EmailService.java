@@ -12,22 +12,25 @@ public class EmailService {
     public boolean sendEmail(String subject, String message, String to) {
         boolean foo = false; // Set the false, default variable "foo", we will allow it after sending code process email
 
-        String senderEmail = "abc285816@gmail.com"; // your gmail email id
-        String senderPassword = "BrunoFisi321"; // your gmail id password
+        String senderEmail = "maximofranciscorepiladomunoz@gmail.com"; // your gmail email id
+        String senderPassword = "xngvohxnyynjgkfx"; // your gmail id password
 
         // Properties class enables us to connect to the host SMTP server
-        Properties properties = new Properties();
+        Properties propiedades = new Properties();
+        propiedades.put("mail.smtp.host", "smtp.gmail.com");
+        propiedades.put("mail.smtp.auth", "true");
+        propiedades.put("mail.smtp.port", "587");
 
-        // Setting necessary information for object property
-
-        // Setup host and mail server
-        properties.put("mail.smtp.auth", "true"); // enable authentication
-        properties.put("mail.smtp.starttls.enable", "true"); // enable TLS-protected connection
-        properties.put("mail.smtp.host", "smtp.gmail.com"); // Mention the SMTP server address. Here Gmail's SMTP server is being used to send email
-        properties.put("mail.smtp.port", "587"); // 587 is TLS port number
+        propiedades.put("mail.properties.mail.smtp.connectiontimeout", "5000");
+        propiedades.put("mail.properties.mail.smtp.timeout", "5000");
+        propiedades.put("mail.properties.mail.smtp.writetimeout", "5000");
+        propiedades.put("mail.smtp.starttls.enable", "true");
+        propiedades.put("mail.smtp.starttls.required", "true");
+        propiedades.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        propiedades.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
         // get the session object and pass username and password
-        Session session = Session.getDefaultInstance(properties, new Authenticator() {
+        Session session = Session.getDefaultInstance(propiedades, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
 
                 return new PasswordAuthentication(senderEmail, senderPassword);
