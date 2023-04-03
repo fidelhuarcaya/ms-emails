@@ -2,6 +2,7 @@ package dev.fidelhuarcaya.msemails.service;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Properties;
@@ -9,12 +10,15 @@ import java.util.Properties;
 
 @Service
 public class EmailService {
+
+    @Value("${email}")
+    private String senderEmail; //your gmail email id
+    @Value("${password}")
+    private String senderPassword ;// your gmail id password
     public boolean sendEmail(String subject, String message, String to) {
 
         boolean foo = false; // Set the false, default variable "foo", we will allow it after sending code process email
 
-        String senderEmail = "ntedetengas@gmail.com"; // your gmail email id
-        String senderPassword = "owepzwovjhpdcdfd"; // your gmail id password
 
         // Properties class enables us to connect to the host SMTP server
         Properties propiedades = new Properties();
