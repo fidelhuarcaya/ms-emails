@@ -19,7 +19,6 @@ public class EmailService {
 
         boolean foo = false; // Set the false, default variable "foo", we will allow it after sending code process email
 
-
         // Properties class enables us to connect to the host SMTP server
         Properties propiedades = new Properties();
         propiedades.put("mail.smtp.host", "smtp.gmail.com");

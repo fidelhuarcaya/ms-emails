@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'ms-emails'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4BA9465EFB56497F8FD5378DF081170D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1C641CAE8250463E9FF6A7559537D299 }}
           package: '*.jar'
