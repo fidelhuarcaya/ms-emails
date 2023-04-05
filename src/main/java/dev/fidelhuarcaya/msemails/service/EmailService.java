@@ -4,6 +4,7 @@ import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.Properties;
 
@@ -15,9 +16,8 @@ public class EmailService {
     private String senderEmail; //your gmail email id
     @Value("${password}")
     private String senderPassword ;// your gmail id password
-    public boolean sendEmail(String subject, String message, String to) {
+    public Mono<Boolean> sendEmail(String subject, String message, String to) {
 
-        boolean foo = false; // Set the false, default variable "foo", we will allow it after sending code process email
 
         // Properties class enables us to connect to the host SMTP server
         Properties propiedades = new Properties();
@@ -47,7 +47,8 @@ public class EmailService {
 
             msg.setFrom(new InternetAddress(senderEmail)); // adding sender email id to msg object
 
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress("fidelhuarcaya20@gmail.com")); // adding recipient to msg object
+            msg.addRecipient(Message.RecipientType.TO,
+                    new InternetAddress("fidelhuarcaya20@gmail.com")); // adding recipient to msg object
 
             msg.setSubject(subject); // adding subject to msg object
             msg.setText(message); // adding text to msg object
@@ -55,13 +56,13 @@ public class EmailService {
             Transport.send(msg); // Transport class send the message using send() method
             System.out.println("Email Sent Wtih Attachment Successfully...");
 
-            foo = true; // Set the "foo" variable to true after successfully sending emails
+            return Mono.just(true); // Set the "foo" variable to true after successfully sending emails
 
         } catch (Exception e) {
 
             System.out.println("EmailService File Error" + e);
         }
 
-        return foo; // and return foo variable
+        return Mono.just(false);  // and return foo variable
     }
 }

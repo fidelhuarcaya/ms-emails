@@ -3,33 +3,34 @@ package dev.fidelhuarcaya.msemails.controller;
 import dev.fidelhuarcaya.msemails.dto.request.EmailRequest;
 import dev.fidelhuarcaya.msemails.service.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/emails/")
+@RequestMapping("/emails")
 @RequiredArgsConstructor
 public class EmailController {
     private final EmailService emailService;
 
-    //this api send simple email
-    @CrossOrigin({ "http://localhost:4200/","https://fidelhuarcaya.dev/" })
     @PostMapping("/send")
-    public ResponseEntity<?> sendEmail(@RequestBody EmailRequest request) {
-
-
-        boolean result = this.emailService.sendEmail(request.getTema()+"-"+request.getEmail(), request.getMensaje(), request.getEmail());
-        if (result) {
-
-            return ResponseEntity.ok("Email Properly Sent Successfully... ");
-
-        } else {
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("email sending fail");
-        }
+    public Mono<ResponseEntity<String>> sendEmail(@RequestBody EmailRequest request) {
+        return emailService.sendEmail(request.getName() + "-" + request.getEmail(),
+                        request.getMessage(),
+                        request.getEmail())
+                .flatMap(success -> {
+                    if (success) {
+                        return Mono.just(ResponseEntity.ok("Email Properly Sent Successfully..."));
+                    } else {
+                        return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("email sending fail"));
+                    }
+                });
     }
+
 /*
     //this api send email with file
     @PostMapping("/sendemailattachement")
