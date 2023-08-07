@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -18,17 +19,13 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("/send")
-    public Mono<ResponseEntity<String>> sendEmail(@RequestBody EmailRequest request) {
+    public Mono<ServerResponse> sendEmail(@RequestBody EmailRequest request) {
         return emailService.sendEmail(request.getName() + "-" + request.getEmail(),
                         request.getMessage(),
                         request.getEmail())
-                .flatMap(success -> {
-                    if (success) {
-                        return Mono.just(ResponseEntity.ok("Email Properly Sent Successfully..."));
-                    } else {
-                        return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("email sending fail"));
-                    }
-                });
+                .flatMap(success -> ServerResponse.ok()
+                        .body(success, Boolean.class)
+                        .switchIfEmpty(ServerResponse.notFound().build()));
     }
 
 /*
