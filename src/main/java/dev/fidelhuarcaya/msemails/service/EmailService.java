@@ -1,5 +1,11 @@
 package dev.fidelhuarcaya.msemails.service;
 
+import com.resend.core.exception.ResendException;
+import com.resend.services.apikeys.model.CreateApiKeyRequest;
+import com.resend.services.apikeys.model.CreateApiKeyResponse;
+import com.resend.services.emails.model.SendEmailRequest;
+import com.resend.services.emails.model.SendEmailResponse;
+import dev.fidelhuarcaya.msemails.dto.request.EmailRequest;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,7 +13,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.Properties;
-
+import com.resend.*;
 
 @Service
 public class EmailService {
@@ -16,6 +22,30 @@ public class EmailService {
     private String senderEmail; //your gmail email id
     @Value("${password}")
     private String senderPassword ;// your gmail id password
+    public Mono<Boolean> sendEmailWhitResend(String subject, String from,  String message, String to) throws ResendException {
+        Resend resend = new Resend("re_123456789");
+
+        CreateApiKeyRequest params = CreateApiKeyRequest
+                .builder()
+                .name("Production").build();
+
+        CreateApiKeyResponse apiKey = resend.apiKeys().create(params);
+
+        SendEmailRequest sendEmailRequest = SendEmailRequest.builder()
+                .from(from)
+                .to("fidelhuarcaya.dev@gmail.com")
+                .subject(subject)
+                .html("<strong>New message</strong>")
+                .build();
+
+        try {
+            SendEmailResponse data = resend.emails().send(sendEmailRequest);
+            System.out.println(data.getId());
+        } catch (ResendException e) {
+            e.printStackTrace();
+        }
+        return Mono.just(true);  // and return foo variable
+    }
     public Mono<Boolean> sendEmail(String subject, String message, String to) {
 
 

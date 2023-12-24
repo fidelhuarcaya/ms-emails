@@ -1,5 +1,6 @@
 package dev.fidelhuarcaya.msemails.controller;
 
+import com.resend.core.exception.ResendException;
 import dev.fidelhuarcaya.msemails.dto.request.EmailRequest;
 import dev.fidelhuarcaya.msemails.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +20,13 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("/send")
-    public Mono<ServerResponse> sendEmail(@RequestBody EmailRequest request) {
-        return emailService.sendEmail(request.getName() + "-" + request.getEmail(),
+    public Mono<ServerResponse> sendEmail(@RequestBody EmailRequest request) throws ResendException {
+        return emailService.sendEmailWhitResend(request.getName() , request.getEmail(),
                         request.getMessage(),
                         request.getEmail())
                 .flatMap(success -> ServerResponse.ok()
                         .body(success, Boolean.class)
-                        .switchIfEmpty(ServerResponse.notFound().build()));
+                        .switchIfEmpty(ServerResponse.badRequest().build()));
     }
 
 /*
