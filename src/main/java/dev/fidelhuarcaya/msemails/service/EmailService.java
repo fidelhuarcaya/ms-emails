@@ -30,7 +30,7 @@ public class EmailService {
                 .from("Acme <onboarding@resend.dev>")
                 .to("blasalexandiers@gmail.com")
                 .subject(subject+"-"+from)
-                .html("<strong>hello world</strong>")
+                .html("<strong>"+message+"</strong>")
                 .build();
 
         try {
