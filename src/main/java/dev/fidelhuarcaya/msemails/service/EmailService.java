@@ -3,6 +3,8 @@ package dev.fidelhuarcaya.msemails.service;
 import com.resend.core.exception.ResendException;
 import com.resend.services.apikeys.model.CreateApiKeyRequest;
 import com.resend.services.apikeys.model.CreateApiKeyResponse;
+import com.resend.services.domains.model.CreateDomainRequest;
+import com.resend.services.domains.model.CreateDomainResponse;
 import com.resend.services.emails.model.SendEmailRequest;
 import com.resend.services.emails.model.SendEmailResponse;
 import dev.fidelhuarcaya.msemails.dto.request.EmailRequest;
@@ -22,20 +24,13 @@ public class EmailService {
     private String senderEmail; //your gmail email id
     @Value("${password}")
     private String senderPassword ;// your gmail id password
-    public Mono<Boolean> sendEmailWhitResend(String subject, String from,  String message, String to) throws ResendException {
-        Resend resend = new Resend("re_123456789");
-
-        CreateApiKeyRequest params = CreateApiKeyRequest
-                .builder()
-                .name("Production").build();
-
-        CreateApiKeyResponse apiKey = resend.apiKeys().create(params);
-
+    public Boolean sendEmailWhitResend(String subject, String from,  String message, String to) throws ResendException {
+        Resend resend = new Resend("re_Lv65JaRv_NQBTVAEWPNDYxDUqyMyNkiky");
         SendEmailRequest sendEmailRequest = SendEmailRequest.builder()
-                .from(from)
-                .to("fidelhuarcaya.dev@gmail.com")
-                .subject(subject)
-                .html("<strong>New message</strong>")
+                .from("Acme <onboarding@resend.dev>")
+                .to("blasalexandiers@gmail.com")
+                .subject(subject+"-"+from)
+                .html("<strong>hello world</strong>")
                 .build();
 
         try {
@@ -44,7 +39,7 @@ public class EmailService {
         } catch (ResendException e) {
             e.printStackTrace();
         }
-        return Mono.just(true);  // and return foo variable
+        return true;  // and return foo variable
     }
     public Mono<Boolean> sendEmail(String subject, String message, String to) {
 

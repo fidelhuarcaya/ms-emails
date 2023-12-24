@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
@@ -20,14 +21,12 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("/send")
-    public Mono<ServerResponse> sendEmail(@RequestBody EmailRequest request) throws ResendException {
-        return emailService.sendEmailWhitResend(request.getName() , request.getEmail(),
+    public ResponseEntity<Boolean> sendEmail(@RequestBody EmailRequest request) throws ResendException {
+        return new ResponseEntity<>(emailService.sendEmailWhitResend(request.getName() , request.getEmail(),
                         request.getMessage(),
-                        request.getEmail())
-                .flatMap(success -> ServerResponse.ok()
-                        .body(success, Boolean.class)
-                        .switchIfEmpty(ServerResponse.badRequest().build()));
+                        request.getEmail()), HttpStatus.OK);
     }
+
 
 /*
     //this api send email with file
